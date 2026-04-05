@@ -4,599 +4,773 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Evolution">
-<title>Evolution</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<title>Dopamine Reboot</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root{
-  --g:#2d6a4f;--gl:#d8f3dc;--gm:#52b788;
-  --r:#9b2226;--rl:#fde8e8;--rm:#e05555;
-  --bg:#f8f5f0;--card:#fff;--text:#1c1c1e;--muted:#888;--border:#e5dfd6;
-  --gold:#b5832a;--gold-l:#fdf3e0;
+:root {
+  --g: #22895a;
+  --gl: #edf7f2;
+  --gm: #34a96e;
+  --r: #d94040;
+  --rl: #fef0f0;
+  --rm: #e86060;
+  --gold: #b8860b;
+  --gold-l: #fff8e1;
+  --gold-bright: #d4a017;
+  --gold-text: #a07010;
+  --orange: #e8600a;
+  --orange-l: #fff3ec;
+  --orange-m: #f07830;
+  --bg: #f5f0e8;
+  --card: #fefcf8;
+  --text: #18181b;
+  --muted: #71717a;
+  --faint: #c4c4cc;
+  --border: #e8e4df;
+  --radius: 18px;
+  --radius-sm: 12px;
 }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
-body{padding-bottom:80px}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; overflow-x: hidden; }
+body { padding-bottom: 84px; }
 
-/* HEADER */
-.hdr{background:var(--text);color:#fff;padding:48px 20px 18px;display:flex;justify-content:space-between;align-items:flex-end}
-.hdr-left h1{font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;letter-spacing:-.5px}
-.hdr-left p{font-size:13px;opacity:.5;margin-top:3px;text-transform:capitalize}
-.pts-badge{background:var(--gold);color:#fff;font-size:13px;font-weight:600;padding:7px 16px;border-radius:30px}
+/* ── HEADER ── */
+.hdr {
+  background: linear-gradient(160deg, #fef9f0 0%, #fdf5e8 100%);
+  padding: 52px 20px 16px;
+  border-bottom: 1px solid #ede6d8;
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.hdr-title { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1; background: linear-gradient(135deg, var(--gold-bright) 0%, #e8a020 50%, var(--gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hdr-sub { font-size: 10px; color: var(--muted); margin-top: 2px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+.hdr-date { font-size: 12px; color: var(--muted); margin-top: 3px; text-transform: capitalize; font-weight: 500; }
+.pts-chip {
+  background: linear-gradient(135deg, #fff8e1 0%, #fef3c0 100%);
+  border: 1.5px solid rgba(180,130,20,.3);
+  border-radius: 14px; padding: 8px 14px; text-align: center; min-width: 72px;
+  box-shadow: 0 2px 8px rgba(180,130,20,.12);
+}
+.pts-num { font-size: 22px; font-weight: 800; color: var(--gold); line-height: 1; }
+.pts-lbl { font-size: 10px; color: var(--gold-text); opacity: .85; margin-top: 2px; letter-spacing: .04em; font-weight: 700; }
 
-/* NAV */
-.nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom,0px)}
-.nb{flex:1;padding:11px 0 9px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'DM Sans',sans-serif;font-size:10px;color:var(--muted);transition:color .15s}
-.nb.on{color:var(--g)}
-.nb span:first-child{font-size:21px;line-height:1}
+/* ── NAV ── */
+.nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+  background: var(--card); border-top: 1px solid var(--border);
+  display: flex; padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.nb {
+  flex: 1; padding: 13px 0 11px; border: none; background: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 700; color: var(--faint);
+  transition: color .2s;
+}
+.nb.on { color: var(--g); }
+.nb.on.priz-on { color: var(--orange); }
 
-/* SCREENS */
-.scr{display:none;padding:14px 16px}
-.scr.on{display:block}
+/* ── SCREENS ── */
+.scr { display: none; padding: 16px; }
+.scr.on { display: block; }
 
-/* CARDS */
-.card{background:var(--card);border-radius:16px;border:1px solid var(--border);padding:16px;margin-bottom:12px}
-.card-ttl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:14px}
+/* ── SALDO ── */
+.saldo-strip {
+  background: var(--card); border-radius: var(--radius);
+  border: 1px solid var(--border); padding: 18px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.saldo-num { font-size: 46px; font-weight: 800; color: var(--g); line-height: 1; letter-spacing: -1.5px; }
+.saldo-num.neg { color: var(--r); }
+.saldo-label { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; }
+.saldo-right { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.saldo-mini { text-align: right; }
+.saldo-mini-n { font-size: 17px; font-weight: 700; }
+.saldo-mini-l { font-size: 10px; color: var(--muted); margin-top: 1px; font-weight: 600; }
 
-/* ROWS */
-.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
-.row:last-child{border-bottom:none;padding-bottom:0}
-.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.dot.g{background:var(--gm)}.dot.r{background:var(--rm)}
-.ri{flex:1;min-width:0}
-.rn{font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rm2{font-size:12px;color:var(--muted);margin-top:2px}
-.badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;flex-shrink:0}
-.bg{background:var(--gl);color:var(--g)}.br{background:var(--rl);color:var(--r)}
-.bgray{background:#f0ece6;color:var(--muted)}
-.xbtn{background:none;border:none;color:#ccc;font-size:20px;cursor:pointer;padding:0 3px;flex-shrink:0;line-height:1}
+/* ── CATEGORY GROUPS ── */
+.cat-group { margin-bottom: 22px; }
+.cat-head {
+  display: flex; align-items: center; gap: 7px;
+  margin-bottom: 9px; padding: 0 3px;
+}
+.cat-icon { font-size: 14px; }
+.cat-name { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+.cat-total {
+  margin-left: auto;
+  font-size: 11px; font-weight: 700; color: var(--g);
+  background: var(--gl); padding: 2px 8px; border-radius: 20px;
+}
+.cat-total.zero { background: transparent; color: var(--faint); }
 
-/* CHECK */
-.chk{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);background:none;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent;transition:all .15s}
-.chk.on{background:var(--gm);border-color:var(--gm);color:#fff}
+/* ── ACTIVITY ROW ── */
+.arow {
+  background: var(--card); border-radius: var(--radius-sm);
+  border: 1px solid var(--border); padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 6px; transition: background .1s;
+}
+.arow:active { background: var(--bg); }
+.arow-info { flex: 1; min-width: 0; }
+.arow-name { font-size: 14px; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.arow-sub { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 500; }
+.arow-right { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
 
-/* LOCK */
-.locked{opacity:.4}
-.prog-wrap{height:4px;background:var(--border);border-radius:2px;margin-top:5px}
-.prog-fill{height:100%;background:var(--rm);border-radius:2px;transition:width .3s}
+/* ── COUNTER ── */
+.ctr { display: flex; align-items: center; gap: 4px; }
+.cb {
+  width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid var(--border);
+  background: var(--bg); cursor: pointer; display: flex; align-items: center;
+  justify-content: center; font-size: 16px; font-weight: 700; color: var(--muted);
+  transition: all .12s;
+}
+.cb:active { transform: scale(.88); }
+.cb.dim { opacity: .28; }
+.cb.gon { background: var(--gl); border-color: rgba(34,137,90,.25); color: var(--g); }
+.cb.ron { background: var(--rl); border-color: rgba(217,64,64,.25); color: var(--r); }
+.cnum { min-width: 22px; text-align: center; font-size: 14px; font-weight: 800; color: var(--text); }
 
-/* FORM */
-.frow{margin-bottom:14px}
-.flabel{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
-.finput{width:100%;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:11px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;-webkit-appearance:none}
-.finput:focus{border-color:var(--gold)}
+/* ── CHIPS / BADGES ── */
+.chip { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; flex-shrink: 0; }
+.chip-g { background: var(--gl); color: var(--g); }
+.chip-r { background: var(--rl); color: var(--r); }
+.chip-gray { background: #f1eeea; color: var(--muted); }
 
-/* BUTTONS */
-.btn{width:100%;padding:14px;border:none;border-radius:13px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;transition:transform .1s}
-.btn:active{transform:scale(.98)}
-.btn-g{background:var(--g);color:#fff}
-.btn-r{background:var(--r);color:#fff}
-.btn-gold{background:var(--gold);color:#fff}
-.btn-sm{width:auto;padding:6px 13px;font-size:12px}
+/* ── PRIZE CARDS ── */
+.prize-strip {
+  background: var(--card); border-radius: var(--radius);
+  border: 1px solid var(--border); padding: 16px;
+  margin-bottom: 10px; position: relative; overflow: hidden;
+}
+.prize-strip.unlocked { border-color: rgba(232,96,10,.35); background: linear-gradient(135deg, #fff 55%, #fff3ec); }
+.prize-strip.locked { opacity: .75; }
+.prize-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.prize-name { font-size: 16px; font-weight: 700; color: var(--text); }
+.prize-cat { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 500; }
+.prize-cost-box { text-align: right; flex-shrink: 0; }
+.prize-cost { font-size: 22px; font-weight: 800; color: var(--orange); line-height: 1; }
+.prize-cost.unlocked { color: var(--orange); }
+.prize-cost-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; font-weight: 600; }
+.prize-bar-wrap { height: 5px; background: var(--border); border-radius: 3px; margin-top: 13px; overflow: hidden; }
+.prize-bar-fill { height: 100%; border-radius: 3px; transition: width .4s; }
+.prize-bar-fill.ok { background: linear-gradient(90deg, var(--orange-m), var(--orange)); }
+.prize-bar-fill.no { background: linear-gradient(90deg, #e0d4c8, var(--faint)); }
+.prize-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 11px; }
+.prize-status { font-size: 12px; color: var(--muted); font-weight: 600; }
+.prize-status.ok { color: var(--orange); }
+.prize-btn {
+  padding: 7px 16px; border-radius: 9px; border: none; cursor: pointer;
+  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+  transition: transform .1s;
+}
+.prize-btn:active { transform: scale(.95); }
+.prize-btn-canjear { background: linear-gradient(135deg, var(--orange-m), var(--orange)); color: #fff; box-shadow: 0 2px 8px rgba(232,96,10,.3); }
+.prize-btn-minus { background: var(--bg); border: 1.5px solid var(--border); color: var(--muted); }
+.prize-uses { font-size: 12px; color: var(--muted); font-weight: 500; }
+.priz-saldo {
+  background: linear-gradient(135deg, #fff8f4 0%, #fff3ec 100%);
+  border-radius: var(--radius);
+  border: 1.5px solid rgba(232,96,10,.2); padding: 16px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 12px rgba(232,96,10,.07);
+}
+.priz-saldo-n { font-size: 30px; font-weight: 800; line-height: 1; }
+.priz-saldo-lbl { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 500; }
+.priz-count { font-size: 13px; color: var(--orange); text-align: right; font-weight: 700; }
 
-/* TABS */
-.tabs{display:flex;gap:8px;margin-bottom:14px}
-.tab{flex:1;padding:9px 6px;background:var(--card);border:1px solid var(--border);border-radius:11px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--muted);text-align:center;transition:all .15s}
-.tab.on-g{background:var(--g);border-color:var(--g);color:#fff}
-.tab.on-r{background:var(--r);border-color:var(--r);color:#fff}
+/* ── FORMS ── */
+.fcard { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 18px; margin-bottom: 12px; }
+.fcard-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+.frow { margin-bottom: 14px; }
+.flbl { display: block; font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 6px; letter-spacing: .04em; text-transform: uppercase; }
+.fin {
+  width: 100%; padding: 11px 14px;
+  background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); font-family: 'Nunito', sans-serif;
+  font-size: 14px; font-weight: 500; color: var(--text); outline: none; -webkit-appearance: none;
+  transition: border-color .2s;
+}
+.fin:focus { border-color: var(--g); background: var(--card); }
+.fin option { background: var(--card); }
 
-/* DAY SELECTOR */
-.dsel{background:var(--card);border-radius:16px;border:1px solid var(--border);margin-bottom:12px;overflow:hidden}
-.dsel-hdr{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer;user-select:none}
-.dsel-lbl{font-size:15px;font-weight:500;text-transform:capitalize}
-.dsel-sub{font-size:12px;color:var(--muted);margin-top:2px}
-.dsel-arr{color:var(--muted);font-size:12px;transition:transform .2s}
-.dsel-arr.open{transform:rotate(180deg)}
-.dlist{border-top:1px solid var(--border);max-height:300px;overflow-y:auto}
-.dlist.hide{display:none}
-.dopt{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;cursor:pointer;font-size:14px;border-bottom:1px solid var(--border);transition:background .1s}
-.dopt:last-child{border-bottom:none}
-.dopt:active{background:var(--bg)}
-.dopt.sel{color:var(--g);font-weight:600}
-.dopt-meta{font-size:12px;color:var(--muted)}
-.cat-note{font-size:12px;color:var(--muted);margin-top:2px}
-.hide{display:none!important}
+/* ── BUTTONS ── */
+.btn {
+  width: 100%; padding: 14px; border: none; border-radius: var(--radius-sm);
+  cursor: pointer; font-family: 'Nunito', sans-serif;
+  font-size: 15px; font-weight: 700; transition: transform .1s;
+}
+.btn:active { transform: scale(.97); }
+.btn-g { background: var(--g); color: #fff; }
+.btn-r { background: var(--r); color: #fff; }
+.btn-gold { background: var(--gold); color: #fff; }
 
-/* STATS */
-.stats{display:flex;gap:10px;margin-bottom:14px}
-.sbox{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
-.sbox.saldo{padding:16px 14px}
-.snum{font-size:26px;font-weight:600}
-.snum.saldo{font-size:34px;line-height:1}
-.slbl{font-size:11px;color:var(--muted);margin-top:1px}
-.slbl.saldo{font-size:12px;letter-spacing:.02em;margin-bottom:4px}
-.snum.g{color:var(--g)}.snum.r{color:var(--r)}
+/* ── TABS ── */
+.tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+.tab {
+  flex: 1; padding: 10px; background: var(--card); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer; font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 600; color: var(--muted); text-align: center; transition: all .15s;
+}
+.tab.tg { background: var(--gl); border-color: rgba(34,137,90,.25); color: var(--g); }
+.tab.tr { background: var(--rl); border-color: rgba(217,64,64,.25); color: var(--r); }
 
-/* TIMELINE */
-.tl-row{display:flex;gap:10px;padding:8px 0}
-.tl-time{font-size:12px;font-weight:600;color:var(--muted);min-width:44px;text-align:right;padding-top:3px}
-.tl-col{display:flex;flex-direction:column;align-items:center}
-.tl-dot{width:10px;height:10px;border-radius:50%;margin-top:3px;flex-shrink:0}
-.tl-dot.g{background:var(--gm)}.tl-dot.r{background:var(--rm)}
-.tl-line{width:2px;flex:1;min-height:14px;background:var(--border);margin-top:3px}
-.tl-body{flex:1;padding-bottom:4px}
-.tl-name{font-size:14px;font-weight:500}
-.tl-tag{display:inline-block;margin-top:3px;font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px}
+/* ── VAR LIST ── */
+.vrow {
+  display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+  border-bottom: 1px solid var(--border); background: var(--card);
+}
+.vrow:first-child { border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+.vrow:last-child { border-bottom: none; border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
+.vcard { border: 1.5px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 12px; }
+.vrow-info { flex: 1; min-width: 0; }
+.vrow-name { font-size: 14px; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vrow-sub { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 500; }
+.xb { background: none; border: none; color: var(--faint); font-size: 18px; cursor: pointer; padding: 2px 4px; line-height: 1; }
 
-/* DIVIDER */
-.div{display:flex;align-items:center;gap:8px;margin:4px 0 12px}
-.div span{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap}
-.div::before,.div::after{content:'';flex:1;height:1px;background:var(--border)}
+/* ── DAY SELECTOR ── */
+.dsel { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 12px; overflow: hidden; }
+.dsel-h { display: flex; justify-content: space-between; align-items: center; padding: 15px 18px; cursor: pointer; user-select: none; }
+.dsel-lbl { font-size: 15px; font-weight: 700; color: var(--text); text-transform: capitalize; }
+.dsel-sub { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 500; }
+.dsel-arr { color: var(--muted); font-size: 11px; transition: transform .2s; }
+.dsel-arr.op { transform: rotate(180deg); }
+.dlist { border-top: 1px solid var(--border); max-height: 280px; overflow-y: auto; }
+.dlist.hide { display: none; }
+.dopt { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; cursor: pointer; font-size: 13px; border-bottom: 1px solid var(--border); transition: background .1s; font-weight: 500; }
+.dopt:last-child { border-bottom: none; }
+.dopt:active { background: var(--bg); }
+.dopt.on { color: var(--g); font-weight: 700; }
+.dopt-m { font-size: 12px; color: var(--muted); font-weight: 500; }
 
-/* EMPTY */
-.empty{text-align:center;padding:28px 16px;color:var(--muted);font-size:14px}
-.empty-ic{font-size:38px;margin-bottom:10px}
+/* ── RESUMEN ── */
+.net-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+.net-num { font-size: 50px; font-weight: 800; line-height: 1; letter-spacing: -1.5px; }
+.net-num.pos { color: var(--g); }
+.net-num.neg { color: var(--r); }
+.net-lbl { font-size: 11px; color: var(--muted); margin-top: 5px; font-weight: 500; }
+.net-side { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+.ns-n { font-size: 18px; font-weight: 700; text-align: right; }
+.ns-l { font-size: 10px; color: var(--muted); text-align: right; margin-top: 1px; font-weight: 600; }
 
-/* TOAST */
-.toast{position:fixed;top:56px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:10px 20px;border-radius:24px;font-size:14px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
-.toast.on{opacity:1}
+/* ── TIMELINE ── */
+.tl-wrap { padding: 2px 0; }
+.tl-row { display: flex; gap: 12px; padding: 8px 0; }
+.tl-t { font-size: 11px; font-weight: 700; color: var(--muted); min-width: 38px; text-align: right; padding-top: 3px; }
+.tl-col { display: flex; flex-direction: column; align-items: center; }
+.tl-dot { width: 9px; height: 9px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+.tl-dot.g { background: var(--gm); }
+.tl-dot.r { background: var(--rm); }
+.tl-line { width: 1px; flex: 1; min-height: 10px; background: var(--border); margin-top: 3px; }
+.tl-b { flex: 1; padding-bottom: 2px; }
+.tl-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.tl-tag { display: inline-block; margin-top: 3px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+
+/* ── PIE CHARTS ── */
+.charts-row { display: flex; gap: 10px; margin-bottom: 12px; }
+.chart-card { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 12px; min-width: 0; }
+.chart-title { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 10px; text-align: center; }
+.chart-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.pie-svg { width: 90px; height: 90px; flex-shrink: 0; }
+.pie-legend { width: 100%; }
+.pie-leg-item { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+.pie-leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.pie-leg-name { font-size: 10px; font-weight: 600; color: var(--text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pie-leg-val { font-size: 10px; font-weight: 700; color: var(--muted); flex-shrink: 0; }
+.chart-empty { font-size: 11px; color: var(--muted); text-align: center; padding: 20px 0; font-weight: 500; }
+/* Net summary bar */
+.net-bar { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-around; gap: 8px; }
+.nb-item { text-align: center; }
+.nb-val { font-size: 28px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+.nb-val.pos { color: var(--g); }
+.nb-val.neg { color: var(--r); }
+.nb-val.earn { color: var(--g); font-size: 20px; }
+.nb-val.spent { color: var(--orange); font-size: 20px; }
+.nb-lbl { font-size: 10px; color: var(--muted); margin-top: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.nb-divider { width: 1px; height: 36px; background: var(--border); }
+
+.sdiv { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .05em; margin: 6px 0 12px 2px; text-transform: uppercase; }
+.empty { text-align: center; padding: 30px 16px; color: var(--muted); font-size: 13px; font-weight: 500; }
+.ei { font-size: 38px; margin-bottom: 10px; }
+.toast { position: fixed; top: 58px; left: 50%; transform: translateX(-50%); background: var(--text); color: #fff; padding: 10px 22px; border-radius: 30px; font-size: 13px; font-weight: 600; z-index: 999; opacity: 0; transition: opacity .3s; pointer-events: none; white-space: nowrap; }
+.toast.on { opacity: 1; }
+.hide { display: none !important; }
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <div class="hdr-left">
-    <h1>Evolution</h1>
-    <p id="hdrDate"></p>
+  <div>
+    <div class="hdr-title">Dopamine Reboot</div>
+    <div class="hdr-sub">Orden y equilibrio</div>
+    <div class="hdr-date" id="hdrDate"></div>
   </div>
-  <div class="pts-badge" id="ptsBadge">0 pts</div>
+  <div class="pts-chip">
+    <div class="pts-num" id="ptsBadge">0</div>
+    <div class="pts-lbl">puntos</div>
+  </div>
 </div>
 
 <!-- HOY -->
 <div class="scr on" id="s-hoy">
-  <div class="card" style="margin-top:4px">
-    <div class="card-ttl">Filtro</div>
-    <div class="frow" style="margin-bottom:0">
-      <label class="flabel">Categoría</label>
-      <select class="finput" id="todayCategory" onchange="setTodayCategory(this.value)"></select>
-    </div>
-  </div>
+  <div id="saldoWrap"></div>
   <div id="actList"></div>
+</div>
+
+<!-- PREMIOS -->
+<div class="scr" id="s-priz">
   <div id="prizList"></div>
 </div>
 
-<!-- ACTIVIDADES Y PREMIOS -->
+<!-- VARIABLES -->
 <div class="scr" id="s-vars">
-  <div class="card" style="margin-top:4px">
-    <div class="card-ttl" id="addTitle">Agregar nueva actividad</div>
-    <div class="tabs" style="margin-bottom:14px">
-      <div class="tab on-g" id="tv-g" onclick="setVarTab('g')">🟢 Actividades</div>
-      <div class="tab" id="tv-r" onclick="setVarTab('r')">🔴 Premios</div>
-    </div>
-
-    <div id="fa-g">
-      <div class="frow">
-        <label class="flabel">Nombre</label>
-        <input class="finput" id="gName" placeholder="ej. Ejercicio, Meditación...">
-      </div>
-      <div class="frow">
-        <label class="flabel">Puntos que otorga</label>
-        <input type="number" class="finput" id="gPts" placeholder="ej. 20" min="1" inputmode="numeric">
-      </div>
-      <div class="frow">
-        <label class="flabel">Categoría</label>
-        <select class="finput" id="gCat" onchange="toggleNewCat('g')"></select>
-      </div>
-      <div class="frow hide" id="gNewCatWrap">
-        <label class="flabel">Nombre de la nueva categoría</label>
-        <input class="finput" id="gNewCat" placeholder="ej. Salud, Trabajo, Ocio...">
-      </div>
-      <button class="btn btn-g" onclick="addAct()">Agregar actividad</button>
-    </div>
-
-    <div id="fa-r" style="display:none">
-      <div class="frow">
-        <label class="flabel">Nombre del premio</label>
-        <input class="finput" id="rName" placeholder="ej. Netflix, Redes sociales...">
-      </div>
-      <div class="frow">
-        <label class="flabel">Puntos necesarios para desbloquearlo</label>
-        <input type="number" class="finput" id="rCost" placeholder="ej. 30" min="1" inputmode="numeric">
-      </div>
-      <div class="frow">
-        <label class="flabel">Categoría</label>
-        <select class="finput" id="rCat" onchange="toggleNewCat('r')"></select>
-      </div>
-      <div class="frow hide" id="rNewCatWrap">
-        <label class="flabel">Nombre de la nueva categoría</label>
-        <input class="finput" id="rNewCat" placeholder="ej. Salud, Trabajo, Ocio...">
-      </div>
-      <button class="btn btn-r" onclick="addPriz()">Agregar premio</button>
-    </div>
+  <div class="tabs" style="margin-top:4px">
+    <div class="tab tg" id="tv-g" onclick="setVarTab('g')">🟢 Actividades</div>
+    <div class="tab" id="tv-r" onclick="setVarTab('r')">🔴 Recompensas</div>
   </div>
-
-  <div class="card">
-    <div class="card-ttl">Variables creadas</div>
-    <div id="varList"></div>
+  <div class="fcard" id="fa-g">
+    <div class="fcard-title">Nueva actividad</div>
+    <div class="frow"><label class="flbl">Nombre</label><input class="fin" id="gName" placeholder="ej. Ejercicio, Meditación..."></div>
+    <div class="frow"><label class="flbl">Puntos que otorga</label><input type="number" class="fin" id="gPts" placeholder="20" min="1" inputmode="numeric"></div>
+    <div class="frow"><label class="flbl">Categoría</label><select class="fin" id="gCat" onchange="toggleNewCat('g')"></select></div>
+    <div class="frow hide" id="gNewCatWrap"><label class="flbl">Nueva categoría</label><input class="fin" id="gNewCat" placeholder="ej. Salud, Trabajo, Ocio..."></div>
+    <button class="btn btn-g" onclick="addAct()">Agregar actividad</button>
   </div>
+  <div class="fcard hide" id="fa-r">
+    <div class="fcard-title">Nuevo premio</div>
+    <div class="frow"><label class="flbl">Nombre del premio</label><input class="fin" id="rName" placeholder="ej. Netflix, Redes sociales..."></div>
+    <div class="frow"><label class="flbl">Puntos para desbloquearlo</label><input type="number" class="fin" id="rCost" placeholder="30" min="1" inputmode="numeric"></div>
+    <div class="frow"><label class="flbl">Categoría</label><select class="fin" id="rCat" onchange="toggleNewCat('r')"></select></div>
+    <div class="frow hide" id="rNewCatWrap"><label class="flbl">Nueva categoría</label><input class="fin" id="rNewCat" placeholder="ej. Ocio, Entretenimiento..."></div>
+    <button class="btn btn-r" onclick="addPriz()">Agregar premio</button>
+  </div>
+  <div class="sdiv" id="varListLbl" style="margin-top:4px">Actividades</div>
+  <div class="vcard" id="varListCard"><div id="varList"></div></div>
 </div>
 
 <!-- RESUMEN -->
 <div class="scr" id="s-res">
   <div id="dselWrap"></div>
   <div id="resDetail"></div>
-  <button class="btn btn-gold" style="margin-top:4px" onclick="exportXL()">📊 Descargar Excel (30 días)</button>
+  <button class="btn btn-gold" style="margin-top:8px" onclick="exportXL()">📊 Descargar Excel (30 días)</button>
 </div>
 
 <nav class="nav">
-  <button class="nb on" onclick="go('hoy',this)"><span>🏃‍♂️</span>Daily habits</button>
-  <button class="nb" onclick="go('vars',this)"><span>📋</span>Add activities and rewards</button>
-  <button class="nb" onclick="go('res',this)"><span>📊</span>Tracker</button>
+  <button class="nb on" onclick="go('hoy',this)"><span class="nb-lbl-hoy" id="navHoyLbl">Mañana</span></button>
+  <button class="nb" onclick="go('priz',this)"><span>Premios</span></button>
+  <button class="nb" onclick="go('vars',this)"><span>Variables</span></button>
+  <button class="nb" onclick="go('res',this)"><span>Resumen</span></button>
 </nav>
-
 <div class="toast" id="toast"></div>
 
-
 <script>
-// ── STATE ──────────────────────────────────────────────────
-var S = {acts:[], prizs:[], log:{}, categories:[]};
-var DAYFULL = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
-var selDay, dropOpen = false, todayCat='all';
+var S={acts:[],prizs:[],log:{},categories:[]};
+var DAYFULL=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+var selDay,dropOpen=false;
+var CATIC={'salud':'🏃','trabajo':'💼','estudio':'📚','ocio':'🎮','familia':'👨‍👩‍👧','social':'🤝','creatividad':'🎨','bienestar':'🧘','deporte':'⚽','finanzas':'💰','sin categoría':'•'};
+function cic(c){return CATIC[(c||'').toLowerCase()]||'◦';}
 
 function load(){
-  var s=localStorage.getItem('evo1');
-  if(s)S=JSON.parse(s);
-  if(!S.categories) S.categories=[];
-  if(S.acts){S.acts.forEach(function(a){
-    a.days=[0,1,2,3,4,5,6];
-    if(!a.category) a.category='Sin categoría';
-    if(S.categories.indexOf(a.category)<0) S.categories.push(a.category);
-  });}
-  if(S.prizs){S.prizs.forEach(function(r){
-    if(!r.category) r.category='Sin categoría';
-    if(S.categories.indexOf(r.category)<0) S.categories.push(r.category);
-  });}
-  S.categories = S.categories.filter(function(c,i,arr){ return c && arr.indexOf(c)===i; });
+  var s=localStorage.getItem('evo1');if(s)S=JSON.parse(s);
+  if(!S.categories)S.categories=[];
+  if(S.acts)S.acts.forEach(function(a){a.days=[0,1,2,3,4,5,6];if(!a.category)a.category='Sin categoría';if(S.categories.indexOf(a.category)<0)S.categories.push(a.category);});
+  if(S.prizs)S.prizs.forEach(function(r){if(!r.category)r.category='Sin categoría';if(S.categories.indexOf(r.category)<0)S.categories.push(r.category);});
+  S.categories=S.categories.filter(function(c,i,arr){return c&&arr.indexOf(c)===i;});
 }
 function save(){localStorage.setItem('evo1',JSON.stringify(S));}
-function today(){return new Date().toISOString().split('T')[0];}
+function today(){var d=new Date();d.setTime(d.getTime()-3*60*60*1000);return d.toISOString().split('T')[0];}
 function nowT(){var d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes());}
 function pad(n){return n.toString().padStart(2,'0');}
 function di(ds){return(new Date(ds+'T12:00:00').getDay()+6)%7;}
 function dlabel(ds){return new Date(ds+'T12:00:00').toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});}
 function dshort(ds){return new Date(ds+'T12:00:00').toLocaleDateString('es-AR',{weekday:'short',day:'numeric',month:'short'});}
 function uid(){return Math.random().toString(36).slice(2,8);}
-function sortCats(arr){ return arr.slice().sort(function(a,b){ return a.localeCompare(b,'es'); }); }
-function ensureCategory(name){
-  name=(name||'').trim();
-  if(!name) return '';
-  if(S.categories.indexOf(name)<0) S.categories.push(name);
-  S.categories = sortCats(S.categories);
-  return name;
-}
-function resolveCategory(type){
+function sc(arr){return arr.slice().sort(function(a,b){return a.localeCompare(b,'es');});}
+function ensureCat(name){name=(name||'').trim();if(!name)return '';if(S.categories.indexOf(name)<0)S.categories.push(name);S.categories=sc(S.categories);return name;}
+function resolveCat(type){
   var sel=document.getElementById(type==='g'?'gCat':'rCat');
-  var newInput=document.getElementById(type==='g'?'gNewCat':'rNewCat');
-  var val=sel ? sel.value : '';
-  if(val==='__new__') val = ensureCategory(newInput.value);
-  else val = ensureCategory(val||'Sin categoría');
-  return val || '';
+  var ni=document.getElementById(type==='g'?'gNewCat':'rNewCat');
+  var val=sel?sel.value:'';
+  if(val==='__new__')val=ensureCat(ni.value);
+  else val=ensureCat(val||'Sin categoría');
+  return val||'';
 }
-function renderCategorySelects(){
-  var cats = sortCats(S.categories);
-  var opts = '<option value="Sin categoría">Sin categoría</option>'
-    + cats.filter(function(c){return c!=='Sin categoría';}).map(function(c){return '<option value="'+c.replace(/"/g,'&quot;')+'">'+c+'</option>';}).join('')
-    + '<option value="__new__">+ Nueva categoría</option>';
-  var g=document.getElementById('gCat'), r=document.getElementById('rCat');
-  if(g){
-    var gv=g.value||'Sin categoría';
-    g.innerHTML=opts;
-    g.value = (cats.indexOf(gv)>=0 || gv==='Sin categoría' || gv==='__new__') ? gv : 'Sin categoría';
-  }
-  if(r){
-    var rv=r.value||'Sin categoría';
-    r.innerHTML=opts;
-    r.value = (cats.indexOf(rv)>=0 || rv==='Sin categoría' || rv==='__new__') ? rv : 'Sin categoría';
-  }
-  toggleNewCat('g'); toggleNewCat('r');
+function renderCatSels(){
+  var cats=sc(S.categories);
+  var base='<option value="Sin categoría">Sin categoría</option>'
+    +cats.filter(function(c){return c!=='Sin categoría';}).map(function(c){return '<option value="'+c.replace(/"/g,'&quot;')+'">'+c+'</option>';}).join('')
+    +'<option value="__new__">+ Nueva categoría</option>';
+  var g=document.getElementById('gCat'),r=document.getElementById('rCat');
+  if(g){var gv=g.value||'Sin categoría';g.innerHTML=base;g.value=(cats.indexOf(gv)>=0||gv==='Sin categoría'||gv==='__new__')?gv:'Sin categoría';}
+  if(r){var rv=r.value||'Sin categoría';r.innerHTML=base;r.value=(cats.indexOf(rv)>=0||rv==='Sin categoría'||rv==='__new__')?rv:'Sin categoría';}
+  toggleNewCat('g');toggleNewCat('r');
 }
-function renderTodayCategoryFilter(){
-  var sel=document.getElementById('todayCategory');
-  if(!sel) return;
-  var cats = sortCats(S.categories);
-  sel.innerHTML = '<option value="all">Todas las categorías</option>' + cats.map(function(c){ return '<option value="'+c.replace(/"/g,'&quot;')+'">'+c+'</option>';}).join('');
-  if(todayCat!=='all' && cats.indexOf(todayCat)<0) todayCat='all';
-  sel.value=todayCat;
+function toggleNewCat(t){
+  var s=document.getElementById(t==='g'?'gCat':'rCat'),w=document.getElementById(t==='g'?'gNewCatWrap':'rNewCatWrap');
+  if(s&&w)w.classList.toggle('hide',s.value!=='__new__');
 }
-function toggleNewCat(type){
-  var sel=document.getElementById(type==='g'?'gCat':'rCat');
-  var wrap=document.getElementById(type==='g'?'gNewCatWrap':'rNewCatWrap');
-  if(!sel || !wrap) return;
-  wrap.classList.toggle('hide', sel.value!=='__new__');
-}
-function setTodayCategory(val){
-  todayCat=val||'all';
-  renderHoy();
-}
-
 function getLog(ds){
   if(!S.log[ds])S.log[ds]={acts:{},prizes:{}};
   var l=S.log[ds];
-
-  // Migración desde versiones anteriores
-  if(!l.acts) l.acts={};
-  if(!l.prizes) l.prizes={};
-
-  if(l.checked){
-    if(Array.isArray(l.checked)){
-      l.checked.forEach(function(id){ if(!l.acts[id]) l.acts[id]=['--:--']; });
-    } else {
-      Object.keys(l.checked).forEach(function(id){
-        var v=l.checked[id];
-        if(!l.acts[id]) l.acts[id]=[v||'--:--'];
-      });
-    }
-    delete l.checked;
-  }
-
-  if(Array.isArray(l.spent)){
-    l.spent.forEach(function(id){
-      if(!l.prizes[id]) l.prizes[id]=['--:--'];
-    });
-    delete l.spent;
-  }
-
-  Object.keys(l.acts).forEach(function(id){
-    if(!Array.isArray(l.acts[id])) l.acts[id]=l.acts[id] ? [l.acts[id]] : [];
-  });
-  Object.keys(l.prizes).forEach(function(id){
-    if(!Array.isArray(l.prizes[id])) l.prizes[id]=l.prizes[id] ? [l.prizes[id]] : [];
-  });
-
+  if(!l.acts)l.acts={};if(!l.prizes)l.prizes={};
+  if(l.checked){if(Array.isArray(l.checked))l.checked.forEach(function(id){if(!l.acts[id])l.acts[id]=['--:--'];});else Object.keys(l.checked).forEach(function(id){var v=l.checked[id];if(!l.acts[id])l.acts[id]=[v||'--:--'];});delete l.checked;}
+  if(Array.isArray(l.spent)){l.spent.forEach(function(id){if(!l.prizes[id])l.prizes[id]=['--:--'];});delete l.spent;}
+  Object.keys(l.acts).forEach(function(id){if(!Array.isArray(l.acts[id]))l.acts[id]=l.acts[id]?[l.acts[id]]:[];});
+  Object.keys(l.prizes).forEach(function(id){if(!Array.isArray(l.prizes[id]))l.prizes[id]=l.prizes[id]?[l.prizes[id]]:[];});
   return l;
 }
-
 function counts(ds){
-  var l=getLog(ds);
-  var earned=0, spent=0, actCount=0, prizeCount=0;
+  var l=getLog(ds),e=0,s=0,ac=0,pc=0;
+  S.acts.forEach(function(a){var c=(l.acts[a.id]||[]).length;ac+=c;e+=c*Number(a.pts);});
+  S.prizs.forEach(function(r){var c=(l.prizes[r.id]||[]).length;pc+=c;s+=c*Number(r.cost);});
+  return{earned:e,spent:s,net:e-s,actCount:ac,prizeCount:pc};
+}
+function updPts(){document.getElementById('ptsBadge').textContent=counts(today()).net;}
 
-  S.acts.forEach(function(a){
-    var c=(l.acts[a.id]||[]).length;
-    actCount += c;
-    earned += c * Number(a.pts);
-  });
-  S.prizs.forEach(function(r){
-    var c=(l.prizes[r.id]||[]).length;
-    prizeCount += c;
-    spent += c * Number(r.cost);
-  });
-
-  return {earned:earned, spent:spent, net:earned-spent, actCount:actCount, prizeCount:prizeCount};
+function hoyLabel(){
+  // Argentina time: UTC-3 always (no DST)
+  var now=new Date();
+  var arH=((now.getUTCHours()-3+24)%24);
+  if(arH>=5&&arH<12)return'Mañana';
+  if(arH>=12&&arH<19)return'Tarde';
+  if(arH>=19&&arH<24)return'Noche';
+  return'Madrugada';
 }
 
-function updPts(){
-  var c=counts(today());
-  document.getElementById('ptsBadge').textContent=c.net+' pts';
-}
-
-// ── BOOT ──────────────────────────────────────────────────
 window.onload=function(){
-  load(); selDay=today();
+  load();selDay=today();
+  var lbl=hoyLabel();
+  document.getElementById('navHoyLbl').textContent=lbl;
   document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
-  renderCategorySelects(); renderTodayCategoryFilter();
-  renderHoy(); setVarTab('g'); updPts();
+  renderCatSels();renderHoy();renderPriz();setVarTab('g');updPts();
 };
 
-// ── HELPERS DE USOS ───────────────────────────────────────
-function actUses(ds,id){ return (getLog(ds).acts[id]||[]).length; }
-function prizeUses(ds,id){ return (getLog(ds).prizes[id]||[]).length; }
-
-function addActUse(id){
-  var l=getLog(today());
-  if(!l.acts[id]) l.acts[id]=[];
-  l.acts[id].push(nowT());
-  save(); renderHoy(); updPts();
+function actU(ds,id){return(getLog(ds).acts[id]||[]).length;}
+function prizU(ds,id){return(getLog(ds).prizes[id]||[]).length;}
+function addAU(id){var l=getLog(today());if(!l.acts[id])l.acts[id]=[];l.acts[id].push(nowT());save();renderHoy();updPts();}
+function remAU(id){var l=getLog(today());if(!l.acts[id]||!l.acts[id].length)return;l.acts[id].pop();if(!l.acts[id].length)delete l.acts[id];save();renderHoy();updPts();}
+function addPU(id){
+  var l=getLog(today()),c=counts(today());
+  var r=S.prizs.find(function(x){return x.id===id;});if(!r)return;
+  if(c.net<Number(r.cost))return showToast('No te alcanzan los puntos');
+  if(!l.prizes[id])l.prizes[id]=[];l.prizes[id].push(nowT());
+  save();renderHoy();renderPriz();updPts();showToast('¡Premio canjeado! 🎉');
 }
-function removeActUse(id){
+function remPU(id){
   var l=getLog(today());
-  if(!l.acts[id] || !l.acts[id].length) return;
-  l.acts[id].pop();
-  if(!l.acts[id].length) delete l.acts[id];
-  save(); renderHoy(); updPts();
-}
-function addPrizeUse(id){
-  var l=getLog(today()), c=counts(today());
-  var r=S.prizs.find(function(x){ return x.id===id; });
-  if(!r) return;
-  if(c.net < Number(r.cost)) return showToast('No te alcanzan los puntos');
-  if(!l.prizes[id]) l.prizes[id]=[];
-  l.prizes[id].push(nowT());
-  save(); renderHoy(); updPts(); showToast('¡Premio canjeado! 🎉');
-}
-function removePrizeUse(id){
-  var l=getLog(today());
-  if(!l.prizes[id] || !l.prizes[id].length) return;
-  l.prizes[id].pop();
-  if(!l.prizes[id].length) delete l.prizes[id];
-  save(); renderHoy(); updPts();
+  if(!l.prizes[id]||!l.prizes[id].length)return;
+  l.prizes[id].pop();if(!l.prizes[id].length)delete l.prizes[id];
+  save();renderHoy();renderPriz();updPts();
 }
 
-// ── HOY ───────────────────────────────────────────────────
+// ── HOY: actividades agrupadas por categoría, ordenadas por pts asc dentro de cada cat ──
 function renderHoy(){
-  var t=today(), c=counts(t);
-  renderTodayCategoryFilter();
-  var acts=S.acts.filter(function(a){ return todayCat==='all' || (a.category||'Sin categoría')===todayCat; });
+  var t=today(),c=counts(t);
+  // saldo
+  var sh='<div class="saldo-strip">'
+    +'<div><div class="saldo-num'+(c.net<0?' neg':'')+'">'+c.net+'</div><div class="saldo-label">saldo disponible</div></div>'
+    +'<div class="saldo-right">'
+    +'<div class="saldo-mini"><div class="saldo-mini-n" style="color:var(--g)">+'+c.earned+'</div><div class="saldo-mini-l">ganados</div></div>'
+    +'<div class="saldo-mini"><div class="saldo-mini-n" style="color:var(--r)">−'+c.spent+'</div><div class="saldo-mini-l">canjeados</div></div>'
+    +'</div></div>';
+  document.getElementById('saldoWrap').innerHTML=sh;
 
-  var gh='<div class="card"><div class="card-ttl">Actividades de hoy</div>';
-  if(!acts.length) gh+='<div class="empty"><div class="empty-ic">🌱</div>Agregá actividades desde ➕</div>';
-  else acts.forEach(function(a){
-    var uses=actUses(t,a.id);
-    gh+='<div class="row">'
-      +'<div class="dot g"></div>'
-      +'<div class="ri"><div class="rn">'+a.name+'</div><div class="rm2">'
-      +(uses? (uses+' vez/veces hoy · última: '+getLog(t).acts[a.id][uses-1]) : 'Todavía no la registraste hoy')
-      +' · '+(a.category||'Sin categoría')
-      +'</div></div>'
-      +'<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">'
-      +'<button class="btn btn-g btn-sm" style="padding:5px 10px" onclick="removeActUse(\''+a.id+'\')">−</button>'
-      +'<span class="badge bgray" style="min-width:32px;text-align:center">'+uses+'</span>'
-      +'<button class="btn btn-g btn-sm" style="padding:5px 10px" onclick="addActUse(\''+a.id+'\')">+</button>'
-      +'<span class="badge bg">+'+a.pts+'</span>'
-      +'</div>'
-      +'</div>';
+  if(!S.acts.length){
+    document.getElementById('actList').innerHTML='<div class="empty"><div class="ei">🌱</div>Agregá actividades desde Variables</div>';
+    return;
+  }
+
+  // Group by category
+  var catMap={};
+  S.acts.forEach(function(a){
+    var cat=a.category||'Sin categoría';
+    if(!catMap[cat])catMap[cat]=[];
+    catMap[cat].push(a);
   });
-  gh+='</div>';
-
-  var rh='<div class="card"><div class="card-ttl">Premios</div>'
-    +'<div class="rm2" style="margin:-6px 0 12px">Disponibles: <strong>'+c.net+' pts</strong> · Ganados: '+c.earned+' · Canjeados: '+c.spent+'</div>';
-  if(!S.prizs.length) rh+='<div class="empty"><div class="empty-ic">🎁</div>Agregá premios desde ➕</div>';
-  else S.prizs.filter(function(r){ return todayCat==='all' || (r.category||'Sin categoría')===todayCat; }).forEach(function(r){
-    var cost=Number(r.cost), uses=prizeUses(t,r.id), unlocked=c.net>=cost;
-    var pct=Math.min(100, cost ? Math.round(c.net/cost*100) : 100);
-    rh+='<div class="row'+((!unlocked && !uses)?' locked':'')+'"><div class="dot r"></div>'
-      +'<div class="ri"><div class="rn">'+r.name+'</div><div class="rm2">'
-      +(r.category||'Sin categoría')+(uses?(' · canjeado '+uses+' vez/veces hoy'):'')
-      +'</div>'
-      +(!unlocked?'<div class="prog-wrap"><div class="prog-fill" style="width:'+pct+'%"></div></div>':'')
-      +'</div>'
-      +'<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">'
-      +'<button class="btn btn-r btn-sm" style="padding:5px 10px" onclick="removePrizeUse(\''+r.id+'\')">−</button>'
-      +'<span class="badge bgray" style="min-width:32px;text-align:center">'+uses+'</span>'
-      +'<button class="btn btn-r btn-sm" '+(unlocked?'':'disabled style="opacity:.45;cursor:not-allowed;padding:5px 10px"')+' onclick="addPrizeUse(\''+r.id+'\')">+</button>'
-      +'<span class="badge br">'+cost+' pts</span>'
-      +'</div>'
-      +'</div>';
+  // Sort each category's acts by pts asc
+  Object.keys(catMap).forEach(function(cat){
+    catMap[cat].sort(function(a,b){return Number(a.pts)-Number(b.pts);});
   });
-  rh+='</div>';
+  // Sort categories by average pts per activity asc (stable, not affected by daily counts)
+  var catKeys=Object.keys(catMap).sort(function(a,b){
+    var avgA=catMap[a].reduce(function(s,x){return s+Number(x.pts);},0)/catMap[a].length;
+    var avgB=catMap[b].reduce(function(s,x){return s+Number(x.pts);},0)/catMap[b].length;
+    return avgA-avgB;
+  });
 
+  var gh='';
+  catKeys.forEach(function(cat){
+    var acts=catMap[cat];
+    var avgPts=Math.round(acts.reduce(function(s,a){return s+Number(a.pts);},0)/acts.length);
+    var catEarned=acts.reduce(function(s,a){return s+actU(t,a.id)*Number(a.pts);},0);
+    gh+='<div class="cat-group">'
+      +'<div class="cat-head"><span class="cat-icon">'+cic(cat)+'</span>'
+      +'<span class="cat-name">'+cat+'</span>'
+      +(catEarned>0?'<span class="cat-total">+'+catEarned+' pts hoy</span>':'')
+      +'</div>';
+    acts.forEach(function(a){
+      var u=actU(t,a.id),last=u?getLog(t).acts[a.id][u-1]:'';
+      gh+='<div class="arow">'
+        +'<div class="arow-info">'
+        +'<div class="arow-name">'+a.name+'</div>'
+        +'<div class="arow-sub">'+(u?'última vez: '+last:'sin registrar hoy')+'</div>'
+        +'</div>'
+        +'<div class="arow-right">'
+        +'<div class="ctr">'
+        +'<button class="cb'+(u?' gon':' dim')+'" onclick="remAU(\''+a.id+'\')">−</button>'
+        +'<span class="cnum">'+u+'</span>'
+        +'<button class="cb gon" onclick="addAU(\''+a.id+'\')">+</button>'
+        +'</div>'
+        +'<span class="chip chip-g">+'+a.pts+'</span>'
+        +'</div>'
+        +'</div>';
+    });
+    gh+='</div>';
+  });
   document.getElementById('actList').innerHTML=gh;
+}
+
+// ── PREMIOS: pestaña dedicada, cards visuales ──
+function renderPriz(){
+  var t=today(),c=counts(t);
+  if(!S.prizs.length){
+    document.getElementById('prizList').innerHTML='<div class="empty" style="margin-top:20px"><div class="ei">🎁</div>Agregá premios desde Variables</div>';
+    return;
+  }
+
+  // Header saldo (compacto)
+  var sh='<div class="priz-saldo">'
+    +'<div><div class="priz-saldo-lbl">Saldo disponible</div>'
+    +'<div class="priz-saldo-n" style="color:'+(c.net>=0?'var(--orange)':'var(--r)')+'">'+c.net+' pts</div></div>'
+    +'<div class="priz-count">'+S.prizs.length+' premio'+(S.prizs.length===1?'':'s')+'<br>disponibles</div>'
+    +'</div>';
+
+  // Sort prizes by cost asc
+  var sorted=S.prizs.slice().sort(function(a,b){return Number(a.cost)-Number(b.cost);});
+  var rh=sh;
+
+  sorted.forEach(function(r){
+    var cost=Number(r.cost),u=prizU(t,r.id),ok=c.net>=cost;
+    var pct=Math.min(100,cost?Math.round(c.net/cost*100):100);
+    rh+='<div class="prize-strip'+(ok?' unlocked':' locked')+'">'
+      +'<div class="prize-top">'
+      +'<div>'
+      +'<div class="prize-name">'+r.name+'</div>'
+      +'<div class="prize-cat">'+cic(r.category||'')+'  '+(r.category||'Sin categoría')+'</div>'
+      +'</div>'
+      +'<div class="prize-cost-box">'
+      +'<div class="prize-cost'+(ok?' unlocked':'')+'">'+cost+'</div>'
+      +'<div class="prize-cost-lbl">pts para canjear</div>'
+      +'</div>'
+      +'</div>';
+
+    if(!ok){
+      rh+='<div class="prize-bar-wrap"><div class="prize-bar-fill '+(ok?'ok':'no')+'" style="width:'+pct+'%"></div></div>';
+    }
+
+    rh+='<div class="prize-footer">';
+    if(ok){
+      rh+='<div class="prize-status ok">✓ Desbloqueado</div>';
+      rh+='<div style="display:flex;gap:8px;align-items:center">';
+      if(u>0)rh+='<span class="prize-uses">canjeado '+u+'x</span><button class="prize-btn prize-btn-minus" onclick="remPU(\''+r.id+'\')">−1</button>';
+      rh+='<button class="prize-btn prize-btn-canjear" onclick="addPU(\''+r.id+'\')">Canjear</button>';
+      rh+='</div>';
+    } else {
+      rh+='<div class="prize-status">Faltan '+(cost-c.net)+' pts</div>';
+      if(u>0)rh+='<div style="display:flex;align-items:center;gap:8px"><span class="prize-uses">canjeado '+u+'x</span><button class="prize-btn prize-btn-minus" onclick="remPU(\''+r.id+'\')">−1</button></div>';
+      else rh+='<div></div>';
+    }
+    rh+='</div></div>';
+  });
+
   document.getElementById('prizList').innerHTML=rh;
 }
 
-// ── VARS ──────────────────────────────────────────────────
+// ── VARIABLES ──
 var vTab='g';
 function setVarTab(t){
   vTab=t;
-  document.getElementById('tv-g').className='tab'+(t==='g'?' on-g':'');
-  document.getElementById('tv-r').className='tab'+(t==='r'?' on-r':'');
-  document.getElementById('fa-g').style.display=t==='g'?'block':'none';
-  document.getElementById('fa-r').style.display=t==='r'?'block':'none';
-  document.getElementById('addTitle').textContent=t==='g'?'Agregar nueva actividad':'Agregar nuevo premio';
+  document.getElementById('tv-g').className='tab'+(t==='g'?' tg':'');
+  document.getElementById('tv-r').className='tab'+(t==='r'?' tr':'');
+  document.getElementById('fa-g').classList.toggle('hide',t!=='g');
+  document.getElementById('fa-r').classList.toggle('hide',t!=='r');
+  document.getElementById('varListLbl').textContent=t==='g'?'Actividades':'Premios';
   renderVars();
 }
 function renderVars(){
   var h='';
   if(vTab==='g'){
-    if(!S.acts.length) h='<div class="empty"><div class="empty-ic">🌿</div>Sin actividades aún</div>';
-    else{
-      h='<div class="card">';
-      S.acts.forEach(function(a){
-        h+='<div class="row"><div class="dot g"></div><div class="ri"><div class="rn">'+a.name+'</div><div class="rm2">'+(a.category||'Sin categoría')+' · activa todos los días · reutilizable</div></div><span class="badge bg">+'+a.pts+'</span><button class="xbtn" onclick="delAct(\''+a.id+'\')">×</button></div>';
-      });
-      h+='</div>';
-    }
+    if(!S.acts.length)h='<div class="empty"><div class="ei">🌿</div>Sin actividades aún</div>';
+    else S.acts.forEach(function(a){
+      h+='<div class="vrow"><div class="vrow-info"><div class="vrow-name">'+a.name+'</div><div class="vrow-sub">'+cic(a.category||'')+' '+(a.category||'Sin categoría')+'</div></div>'
+        +'<span class="chip chip-g">+'+a.pts+'</span><button class="xb" onclick="delAct(\''+a.id+'\')">×</button></div>';
+    });
   } else {
-    if(!S.prizs.length) h='<div class="empty"><div class="empty-ic">🎁</div>Sin premios aún</div>';
-    else{
-      h='<div class="card">';
-      S.prizs.forEach(function(r){
-        h+='<div class="row"><div class="dot r"></div><div class="ri"><div class="rn">'+r.name+'</div><div class="rm2">'+(r.category||'Sin categoría')+' · reutilizable</div></div><span class="badge br">'+r.cost+' pts</span><button class="xbtn" onclick="delPriz(\''+r.id+'\')">×</button></div>';
-      });
-      h+='</div>';
-    }
+    if(!S.prizs.length)h='<div class="empty"><div class="ei">🎁</div>Sin premios aún</div>';
+    else S.prizs.forEach(function(r){
+      h+='<div class="vrow"><div class="vrow-info"><div class="vrow-name">'+r.name+'</div><div class="vrow-sub">'+cic(r.category||'')+' '+(r.category||'Sin categoría')+'</div></div>'
+        +'<span class="chip chip-r">'+r.cost+'pts</span><button class="xb" onclick="delPriz(\''+r.id+'\')">×</button></div>';
+    });
   }
   document.getElementById('varList').innerHTML=h;
+  document.getElementById('varListCard').style.display=h?'block':'none';
 }
-function delAct(id){S.acts=S.acts.filter(function(a){return a.id!==id;});save();renderCategorySelects();renderTodayCategoryFilter();renderHoy();renderVars();updPts();showToast('Eliminado');}
-function delPriz(id){S.prizs=S.prizs.filter(function(r){return r.id!==id;});save();renderCategorySelects();renderTodayCategoryFilter();renderHoy();renderVars();updPts();showToast('Eliminado');}
-
-// ── ADD ───────────────────────────────────────────────────
+function delAct(id){S.acts=S.acts.filter(function(a){return a.id!==id;});save();renderCatSels();renderHoy();renderVars();updPts();showToast('Eliminado');}
+function delPriz(id){S.prizs=S.prizs.filter(function(r){return r.id!==id;});save();renderCatSels();renderPriz();renderVars();updPts();showToast('Eliminado');}
 function addAct(){
   var name=document.getElementById('gName').value.trim();
   var p=document.getElementById('gPts').value;
-  var category=resolveCategory('g');
+  var cat=resolveCat('g');
   if(!name)return showToast('Ingresá un nombre');
   if(!p||p<1)return showToast('Ingresá los puntos');
-  if(!category)return showToast('Ingresá la categoría');
-  S.acts.push({id:uid(),name:name,pts:Number(p),days:[0,1,2,3,4,5,6],category:category});
-  save(); renderCategorySelects(); renderTodayCategoryFilter(); renderHoy(); renderVars(); updPts();
-  document.getElementById('gName').value=''; document.getElementById('gPts').value=''; document.getElementById('gNewCat').value=''; document.getElementById('gCat').value=category; toggleNewCat('g');
+  if(!cat)return showToast('Ingresá la categoría');
+  S.acts.push({id:uid(),name:name,pts:Number(p),days:[0,1,2,3,4,5,6],category:cat});
+  save();renderCatSels();renderHoy();renderVars();updPts();
+  document.getElementById('gName').value='';document.getElementById('gPts').value='';document.getElementById('gNewCat').value='';
   showToast('Actividad agregada ✓');
-  go('vars',document.querySelectorAll('.nb')[1]);
 }
 function addPriz(){
   var name=document.getElementById('rName').value.trim();
   var cost=document.getElementById('rCost').value;
-  var category=resolveCategory('r');
+  var cat=resolveCat('r');
   if(!name)return showToast('Ingresá un nombre');
-  if(!cost||cost<1)return showToast('Ingresá el costo en puntos');
-  if(!category)return showToast('Ingresá la categoría');
-  S.prizs.push({id:uid(),name:name,cost:Number(cost),desc:'',category:category});
-  save(); renderCategorySelects(); renderTodayCategoryFilter(); renderHoy(); renderVars(); updPts();
-  document.getElementById('rName').value=''; document.getElementById('rCost').value=''; document.getElementById('rNewCat').value=''; document.getElementById('rCat').value=category; toggleNewCat('r');
+  if(!cost||cost<1)return showToast('Ingresá el costo');
+  if(!cat)return showToast('Ingresá la categoría');
+  S.prizs.push({id:uid(),name:name,cost:Number(cost),desc:'',category:cat});
+  save();renderCatSels();renderPriz();renderVars();updPts();
+  document.getElementById('rName').value='';document.getElementById('rCost').value='';document.getElementById('rNewCat').value='';
   showToast('Premio agregado ✓');
-  go('vars',document.querySelectorAll('.nb')[1]);
 }
 
-// ── RESUMEN ───────────────────────────────────────────────
-function last30(){
-  var t=today(),d=new Date(t+'T12:00:00'),arr=[];
-  for(var i=0;i<30;i++){var dt=new Date(d);dt.setDate(d.getDate()-i);arr.push(dt.toISOString().split('T')[0]);}
-  return arr;
-}
-function renderRes(){
-  var days=last30(),t=today();
-  var sh='<div class="dsel"><div class="dsel-hdr" onclick="togDrop()">'
-    +'<div><div class="dsel-lbl">'+(selDay===t?'Hoy · ':'')+dlabel(selDay)+'</div>'
-    +'<div class="dsel-sub">Tocá para ver otro día</div></div>'
-    +'<span class="dsel-arr'+(dropOpen?' open':'')+'">▼</span>'
-    +'</div><div class="dlist'+(dropOpen?'':' hide')+'">';
-  days.forEach(function(ds){
-    var c=counts(ds);
-    sh+='<div class="dopt'+(selDay===ds?' sel':'')+'" onclick="pickDay(\''+ds+'\')">'
-      +'<span style="text-transform:capitalize">'+(ds===t?'Hoy · ':'')+dshort(ds)+'</span>'
-      +'<span class="dopt-meta">'+c.net+' pts · '+c.actCount+' act.</span></div>';
+// ── RESUMEN ──
+function last30(){var t=today(),d=new Date(t+'T12:00:00'),arr=[];for(var i=0;i<30;i++){var dt=new Date(d);dt.setDate(d.getDate()-i);arr.push(dt.toISOString().split('T')[0]);}return arr;}
+
+// Build SVG pie from data array [{label,value,color}]
+function buildPie(data){
+  var total=data.reduce(function(s,d){return s+d.value;},0);
+  if(!total)return null;
+  var svg='<svg class="pie-svg" viewBox="0 0 90 90">';
+  var cx=45,cy=45,r=38,startAngle=-Math.PI/2;
+  data.forEach(function(d){
+    var angle=(d.value/total)*2*Math.PI;
+    var endAngle=startAngle+angle;
+    var x1=cx+r*Math.cos(startAngle),y1=cy+r*Math.sin(startAngle);
+    var x2=cx+r*Math.cos(endAngle),y2=cy+r*Math.sin(endAngle);
+    var large=angle>Math.PI?1:0;
+    if(data.length===1){
+      svg+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+d.color+'"/>';
+    } else {
+      svg+='<path d="M'+cx+','+cy+' L'+x1+','+y1+' A'+r+','+r+' 0 '+large+',1 '+x2+','+y2+' Z" fill="'+d.color+'" stroke="#fff" stroke-width="1.5"/>';
+    }
+    startAngle=endAngle;
   });
+  // center hole
+  svg+='<circle cx="'+cx+'" cy="'+cy+'" r="22" fill="#fff"/>';
+  svg+='</svg>';
+  return svg;
+}
+
+var ACT_COLORS=['#22895a','#34a96e','#4dc98a','#1a6e48','#89c9a8','#0f4d33','#67b992'];
+var PRIZ_COLORS=['#e8600a','#d94040','#f07830','#c04020','#f0a060','#a03010','#e89050'];
+
+function renderRes(){
+  var days=last30(),t=today(),c=counts(selDay);
+  var sh='<div class="dsel"><div class="dsel-h" onclick="togDrop()"><div><div class="dsel-lbl">'+(selDay===t?'Hoy · ':'')+dlabel(selDay)+'</div><div class="dsel-sub">Tocá para ver otro día</div></div><span class="dsel-arr'+(dropOpen?' op':'')+'">▼</span></div><div class="dlist'+(dropOpen?'':' hide')+'">';
+  days.forEach(function(ds){var cc=counts(ds);sh+='<div class="dopt'+(selDay===ds?' on':'')+'" onclick="pickDay(\''+ds+'\')">'+'<span style="text-transform:capitalize">'+(ds===t?'Hoy · ':'')+dshort(ds)+'</span><span class="dopt-m">'+cc.net+' pts · '+cc.actCount+' act.</span></div>';});
   sh+='</div></div>';
   document.getElementById('dselWrap').innerHTML=sh;
 
-  var l=getLog(selDay), c=counts(selDay);
-  var events=[], seq=0;
-
-  function timeToMinutes(tm){
-    if(!tm || tm==='--:--') return 9999;
-    var parts=tm.split(':');
-    return Number(parts[0])*60 + Number(parts[1]);
-  }
-
-  S.acts.forEach(function(a){
-    (l.acts[a.id]||[]).forEach(function(tm){
-      events.push({type:'g',name:a.name,pts:a.pts,time:tm||'--:--', timeMinutes:timeToMinutes(tm), seq:seq++});
-    });
-  });
-  S.prizs.forEach(function(r){
-    (l.prizes[r.id]||[]).forEach(function(tm){
-      events.push({type:'r',name:r.name,cost:r.cost,time:tm||'--:--', timeMinutes:timeToMinutes(tm), seq:seq++});
-    });
-  });
-
-  events.sort(function(a,b){
-    if(a.timeMinutes!==b.timeMinutes) return a.timeMinutes-b.timeMinutes;
-    return a.seq-b.seq;
-  });
-
-  var dh='<div class="card"><div class="stats">'
-    +'<div class="sbox saldo"><div class="slbl saldo">Saldo total:</div><div class="snum saldo g">'+c.net+'</div></div>'
-    +'<div class="sbox"><div class="snum g">'+c.earned+'</div><div class="slbl">ganados</div></div>'
-    +'<div class="sbox"><div class="snum r">'+c.spent+'</div><div class="slbl">canjeados</div></div>'
+  // Net summary bar (compact)
+  var dh='<div class="net-bar">'
+    +'<div class="nb-item"><div class="nb-val earn">+'+c.earned+'</div><div class="nb-lbl">Ganados</div></div>'
+    +'<div class="nb-divider"></div>'
+    +'<div class="nb-item"><div class="nb-val '+(c.net>=0?'pos':'neg')+'">'+c.net+'</div><div class="nb-lbl">Saldo</div></div>'
+    +'<div class="nb-divider"></div>'
+    +'<div class="nb-item"><div class="nb-val spent">−'+c.spent+'</div><div class="nb-lbl">Canjeados</div></div>'
     +'</div>';
 
-  if(!events.length){
-    dh+='<div class="empty" style="padding:16px 0"><div class="empty-ic">📭</div>Sin actividad este día</div>';
-  } else {
-    dh+='<div class="div"><span>📈 Línea de tiempo</span></div>';
+  // Build category data for activities
+  var l=getLog(selDay);
+  var actCatMap={};
+  S.acts.forEach(function(a){
+    var n=(l.acts[a.id]||[]).length;
+    if(!n)return;
+    var cat=a.category||'Sin categoría';
+    if(!actCatMap[cat])actCatMap[cat]=0;
+    actCatMap[cat]+=n*Number(a.pts);
+  });
+  var actData=Object.keys(actCatMap).map(function(cat,i){return{label:cat,value:actCatMap[cat],color:ACT_COLORS[i%ACT_COLORS.length]};});
+  actData.sort(function(a,b){return b.value-a.value;});
+
+  // Build category data for prizes
+  var prizCatMap={};
+  S.prizs.forEach(function(r){
+    var n=(l.prizes[r.id]||[]).length;
+    if(!n)return;
+    var cat=r.category||'Sin categoría';
+    if(!prizCatMap[cat])prizCatMap[cat]=0;
+    prizCatMap[cat]+=n*Number(r.cost);
+  });
+  var prizData=Object.keys(prizCatMap).map(function(cat,i){return{label:cat,value:prizCatMap[cat],color:PRIZ_COLORS[i%PRIZ_COLORS.length]};});
+  prizData.sort(function(a,b){return b.value-a.value;});
+
+  // Pie charts row
+  dh+='<div class="charts-row">';
+
+  // Activities pie
+  dh+='<div class="chart-card"><div class="chart-title">🟢 Actividades por cat.</div>';
+  if(!actData.length){dh+='<div class="chart-empty">Sin actividades este día</div>';}
+  else{
+    var pie=buildPie(actData);
+    dh+='<div class="chart-wrap">'+pie+'<div class="pie-legend">';
+    actData.forEach(function(d){
+      dh+='<div class="pie-leg-item"><div class="pie-leg-dot" style="background:'+d.color+'"></div>'
+        +'<div class="pie-leg-name">'+d.label+'</div>'
+        +'<div class="pie-leg-val">'+d.value+'pts</div></div>';
+    });
+    dh+='</div></div>';
+  }
+  dh+='</div>';
+
+  // Prizes pie
+  dh+='<div class="chart-card"><div class="chart-title">🟠 Premios canjeados</div>';
+  if(!prizData.length){dh+='<div class="chart-empty">Sin canjes este día</div>';}
+  else{
+    var pie2=buildPie(prizData);
+    dh+='<div class="chart-wrap">'+pie2+'<div class="pie-legend">';
+    prizData.forEach(function(d){
+      dh+='<div class="pie-leg-item"><div class="pie-leg-dot" style="background:'+d.color+'"></div>'
+        +'<div class="pie-leg-name">'+d.label+'</div>'
+        +'<div class="pie-leg-val">'+d.value+'pts</div></div>';
+    });
+    dh+='</div></div>';
+  }
+  dh+='</div>';
+
+  dh+='</div>'; // end charts-row
+
+  // Timeline
+  var events=[],seq=0;
+  function tm2m(tm){if(!tm||tm==='--:--')return 9999;var p=tm.split(':');return Number(p[0])*60+Number(p[1]);}
+  S.acts.forEach(function(a){(l.acts[a.id]||[]).forEach(function(tm){events.push({type:'g',name:a.name,pts:a.pts,time:tm||'--:--',tmin:tm2m(tm),seq:seq++});});});
+  S.prizs.forEach(function(r){(l.prizes[r.id]||[]).forEach(function(tm){events.push({type:'r',name:r.name,cost:r.cost,time:tm||'--:--',tmin:tm2m(tm),seq:seq++});});});
+  events.sort(function(a,b){return a.tmin!==b.tmin?a.tmin-b.tmin:a.seq-b.seq;});
+
+  dh+='<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px">';
+  if(!events.length){dh+='<div class="empty" style="padding:16px 0"><div class="ei">📭</div>Sin actividad este día</div>';}
+  else{
+    dh+='<div class="sdiv" style="margin:0 0 10px">Línea de tiempo</div><div class="tl-wrap">';
     events.forEach(function(ev,i){
       var last=i===events.length-1;
-      dh+='<div class="tl-row"><div class="tl-time">'+ev.time+'</div>'
+      dh+='<div class="tl-row"><div class="tl-t">'+ev.time+'</div>'
         +'<div class="tl-col"><div class="tl-dot '+ev.type+'"></div>'+(last?'':'<div class="tl-line"></div>')+'</div>'
-        +'<div class="tl-body"><div class="tl-name">'+ev.name+'</div>'
-        +(ev.type==='g'
-          ? '<span class="tl-tag bg">+'+ev.pts+' pts</span>'
-          : '<span class="tl-tag br">−'+ev.cost+' pts</span>')
+        +'<div class="tl-b"><div class="tl-name">'+ev.name+'</div>'
+        +(ev.type==='g'?'<span class="tl-tag chip-g">+'+ev.pts+' pts</span>':'<span class="tl-tag chip-r">−'+ev.cost+' pts</span>')
         +'</div></div>';
     });
+    dh+='</div>';
   }
   dh+='</div>';
   document.getElementById('resDetail').innerHTML=dh;
@@ -604,65 +778,34 @@ function renderRes(){
 function togDrop(){dropOpen=!dropOpen;renderRes();}
 function pickDay(ds){selDay=ds;dropOpen=false;renderRes();}
 
-// ── EXCEL ─────────────────────────────────────────────────
+// ── EXCEL ──
 function exportXL(){
   var days=last30().reverse(),wb=XLSX.utils.book_new();
-  var w1=[['Fecha','Día','Puntos netos','Puntos ganados','Puntos canjeados','Actividades completadas','Premios usados']];
-  days.forEach(function(d){
-    var c=counts(d), l=getLog(d);
-    var actNames=[], prizeNames=[];
-    S.acts.forEach(function(a){
-      var n=(l.acts[a.id]||[]).length;
-      if(n) actNames.push(a.name+' x'+n);
-    });
-    S.prizs.forEach(function(r){
-      var n=(l.prizes[r.id]||[]).length;
-      if(n) prizeNames.push(r.name+' x'+n);
-    });
-    w1.push([d,DAYFULL[di(d)],c.net,c.earned,c.spent,actNames.join(', ')||'-',prizeNames.join(', ')||'-']);
-  });
-  var s1=XLSX.utils.aoa_to_sheet(w1);s1['!cols']=[{wch:12},{wch:12},{wch:12},{wch:14},{wch:16},{wch:40},{wch:30}];
-  XLSX.utils.book_append_sheet(wb,s1,'Resumen');
-
-  var w2=[['Fecha','Actividad','Hora','Puntos']];
-  days.forEach(function(d){
-    var l=getLog(d);
-    S.acts.forEach(function(a){
-      (l.acts[a.id]||[]).forEach(function(tm){ w2.push([d,a.name,tm||'-',a.pts]); });
-    });
-  });
-  var s2=XLSX.utils.aoa_to_sheet(w2);s2['!cols']=[{wch:12},{wch:22},{wch:8},{wch:8}];
-  XLSX.utils.book_append_sheet(wb,s2,'Actividades');
-
-  var w3=[['Fecha','Premio','Hora','Puntos restados']];
-  days.forEach(function(d){
-    var l=getLog(d);
-    S.prizs.forEach(function(r){
-      (l.prizes[r.id]||[]).forEach(function(tm){ w3.push([d,r.name,tm||'-',r.cost]); });
-    });
-  });
-  var s3=XLSX.utils.aoa_to_sheet(w3);s3['!cols']=[{wch:12},{wch:22},{wch:8},{wch:14}];
-  XLSX.utils.book_append_sheet(wb,s3,'Premios');
-
-  XLSX.writeFile(wb,'evolution_reutilizable_'+days[0].replace(/-/g,'')+'_'+days[days.length-1].replace(/-/g,'')+'.xlsx');
+  var w1=[['Fecha','Día','Pts netos','Pts ganados','Pts canjeados','Actividades','Premios']];
+  days.forEach(function(d){var c=counts(d),l=getLog(d),an=[],pn=[];S.acts.forEach(function(a){var n=(l.acts[a.id]||[]).length;if(n)an.push(a.name+' x'+n);});S.prizs.forEach(function(r){var n=(l.prizes[r.id]||[]).length;if(n)pn.push(r.name+' x'+n);});w1.push([d,DAYFULL[di(d)],c.net,c.earned,c.spent,an.join(', ')||'-',pn.join(', ')||'-']);});
+  var s1=XLSX.utils.aoa_to_sheet(w1);s1['!cols']=[{wch:12},{wch:12},{wch:10},{wch:12},{wch:14},{wch:40},{wch:30}];XLSX.utils.book_append_sheet(wb,s1,'Resumen');
+  var w2=[['Fecha','Actividad','Hora','Puntos','Categoría']];
+  days.forEach(function(d){var l=getLog(d);S.acts.forEach(function(a){(l.acts[a.id]||[]).forEach(function(tm){w2.push([d,a.name,tm||'-',a.pts,a.category||'-']);});});});
+  var s2=XLSX.utils.aoa_to_sheet(w2);s2['!cols']=[{wch:12},{wch:22},{wch:8},{wch:8},{wch:16}];XLSX.utils.book_append_sheet(wb,s2,'Actividades');
+  var w3=[['Fecha','Premio','Hora','Pts restados','Categoría']];
+  days.forEach(function(d){var l=getLog(d);S.prizs.forEach(function(r){(l.prizes[r.id]||[]).forEach(function(tm){w3.push([d,r.name,tm||'-',r.cost,r.category||'-']);});});});
+  var s3=XLSX.utils.aoa_to_sheet(w3);s3['!cols']=[{wch:12},{wch:22},{wch:8},{wch:12},{wch:16}];XLSX.utils.book_append_sheet(wb,s3,'Premios');
+  XLSX.writeFile(wb,'evolution_'+days[0].replace(/-/g,'')+'_'+days[days.length-1].replace(/-/g,'')+'.xlsx');
   showToast('Excel descargado ✓');
 }
 
-// ── NAV ───────────────────────────────────────────────────
+// ── NAV ──
 function go(scr,btn){
   document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on');});
-  document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on');});
+  document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on','priz-on');});
   document.getElementById('s-'+scr).classList.add('on');
-  if(btn) btn.classList.add('on');
+  if(btn){btn.classList.add('on');if(scr==='priz')btn.classList.add('priz-on');}
   if(scr==='res'){selDay=today();dropOpen=false;renderRes();}
-  if(scr==='vars') renderVars();
-  if(scr==='hoy') renderHoy();
+  if(scr==='vars'){renderCatSels();renderVars();}
+  if(scr==='hoy')renderHoy();
+  if(scr==='priz')renderPriz();
 }
-function showToast(msg){
-  var t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');
-  setTimeout(function(){t.classList.remove('on');},2200);
-}
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2200);}
 </script>
-
 </body>
 </html>
