@@ -13,4 +13,4 @@ npm install
 npm run web      # o: npx expo start
 ```
 
-Deploy en Vercel: importar el repo tal cual (ya trae `vercel.json`).
+Versión web publicada: https://tomasjuarez021-debug.github.io/Plan-nutricional/plan/ (carpeta `plan/`, se regenera con `npx expo export --platform web` y se mueve `dist` → `plan`).
