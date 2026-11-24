@@ -88,6 +88,38 @@ nav svg{width:22px;height:22px}
 .ing b{width:72px;text-align:right;font-weight:800}
 .cta{position:fixed;left:20px;right:20px;bottom:calc(20px + env(safe-area-inset-bottom));height:54px;border-radius:27px;background:var(--accent);color:#fff;font-size:16px;font-weight:800;max-width:520px;margin:0 auto}
 .cta.off{background:var(--card);color:var(--text)}
+.sub{font-size:13px;font-weight:500;color:var(--muted)}
+h1{font-size:40px;letter-spacing:-1.6px}
+.prog{display:flex;align-items:center;gap:12px;margin-top:18px}
+.prog .bar{flex:1;margin:0}
+.prog span{font-size:13px;font-weight:700;color:var(--muted)}
+.cards{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+.mc{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:20px;padding:16px 16px 16px 18px;cursor:pointer;transition:transform .1s}
+.mc:active{transform:scale(.985)}
+.mc .k{font-size:12px;font-weight:600;color:var(--muted)}
+.mc .t{font-size:16px;font-weight:700;letter-spacing:-.3px;line-height:1.3;margin-top:2px}
+.mc .p{font-size:13px;color:var(--muted);margin-top:4px}
+.mc.done .t{color:var(--muted);text-decoration:line-through}
+.mc .chk{border-color:var(--line);background:var(--bg)}
+.mc .chk.on{background:var(--accent)}
+.wk{margin-top:26px}
+.wh{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+.wh b{font-size:20px;font-weight:800;letter-spacing:-.6px}
+.wh span{font-size:13px;color:var(--muted)}
+.wl{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--line);cursor:pointer}
+.wl span{flex:none;width:74px;font-size:12px;font-weight:600;color:var(--muted);padding-top:2px}
+.wl p{font-size:14.5px;line-height:1.35}
+.more{margin-top:28px;background:var(--card);border-radius:18px;padding:14px 16px}
+.more summary{font-size:14px;font-weight:700;cursor:pointer;list-style:none}
+.more summary::-webkit-details-marker{display:none}
+.more summary:after{content:"+";float:right;color:var(--muted)}
+.more[open] summary:after{content:"–"}
+.more p{font-size:13.5px;line-height:19px;margin-top:10px;color:var(--muted)}
+.more .ing{border-color:var(--line)}
+.mine{margin-top:22px;background:var(--soft);border-radius:20px;padding:18px;font-size:20px;font-weight:800;letter-spacing:-.5px;line-height:1.35}
+.mine span{display:block;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:0;margin-bottom:6px}
+.mine small{display:block;font-size:13px;font-weight:500;color:var(--muted);letter-spacing:0;margin-top:8px}
+.top .round{font-size:18px}
 </style>
 </head>
 <body>
@@ -337,36 +369,33 @@ function toggleMeal(p, date, i) {
 }
 
 // ── Hoy ──
+const SHORT_M = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 function viewHoy() {
-  const days = lastDays(7), todayK = dKey(days[6]);
-  if (!sel) sel = todayK;
-  const sd = days.find(d => dKey(d) === sel) || days[6];
-  const di = pIdx(sd), day = WEEK[di], p = S.person, list = S.done[p][sel] || [], prof = PROFILE[p];
+  const d = new Date(), k = dKey(d), di = pIdx(d), day = WEEK[di], p = S.person, list = S.done[p][k] || [];
+  const n = list.length, tot = day.meals.length;
   return `<div class="wrap">
-    <div class="row between" style="align-items:flex-end"><div><div class="caps">${day.name} · ${longDate(sd)}</div><h1>${sel === todayK ? 'Hoy' : day.name}</h1></div>
-    ${seg([['el','Él'],['ella','Ella']], p, 'setPerson')}</div>
-    <div class="days">${days.map(d => { const k = dKey(d), w = WEEK[pIdx(d)], v = (S.done[p][k] || []).length / w.meals.length;
-      return `<button class="day ${k === sel ? 'sel' : ''} ${v >= 1 ? 'full' : ''}" onclick="sel='${k}';render()"><span class="l">${w.short}</span><span class="dot">${v >= 1 ? '' : ring(v)}<span>${d.getDate()}</span></span><span class="today" style="background:${k === todayK ? 'var(--accent)' : 'transparent'}"></span></button>`; }).join('')}</div>
-    <div class="stats"><div class="stat"><span class="caps">Comidas</span><b>${list.length}/${day.meals.length}</b></div><div class="stat"><span class="caps">Kcal</span><b>~${prof.kcal}</b></div><div class="stat"><span class="caps">Proteína</span><b>${prof.prot} g</b></div></div>
-    <div class="bar"><i style="width:${list.length / day.meals.length * 100}%"></i></div>
-    <div style="margin-top:18px">${day.meals.map((m, i) => `<div class="meal ${list.includes(i) ? 'done' : ''}" onclick="openMeal(${di},${i},'${sel}')">
-      <div style="flex:1"><div class="kind">${m.kind}</div><div class="t">${esc(m.menu)}</div><div class="p">${m.free ? 'Libre' : esc(m[p])}</div></div>
-      <button onclick="event.stopPropagation();toggleMeal('${p}','${sel}',${i})">${chk(list.includes(i))}</button></div>`).join('')}</div>
+    <div class="row between"><span class="sub">${day.name} ${d.getDate()} ${SHORT_M[d.getMonth()]}</span>${seg([['el','Él'],['ella','Ella']], p, 'setPerson')}</div>
+    <h1 style="margin-top:6px">Hoy</h1>
+    <div class="prog"><div class="bar"><i style="width:${n / tot * 100}%"></i></div><span>${n}/${tot}</span></div>
+    <div class="cards">${day.meals.map((m, i) => { const on = list.includes(i); return `<div class="mc ${on ? 'done' : ''}" onclick="openMeal(${di},${i},'${k}')">
+      <div style="flex:1;min-width:0"><div class="k">${m.kind}</div><div class="t">${esc(m.menu)}</div>${m.free ? '' : `<div class="p">${esc(m[p])}</div>`}</div>
+      <button onclick="event.stopPropagation();toggleMeal('${p}','${k}',${i})">${chk(on)}</button></div>`; }).join('')}</div>
   </div>`;
 }
 function setPerson(p) { S.person = p; save(); render(); }
 
-// ── Semana ──
+// ── Semana: hoy y los días que vienen ──
 function viewSemana() {
-  const t = pIdx(new Date());
-  if (semDay === null) semDay = t;
-  const day = WEEK[semDay], p = S.person;
-  const block = (title, items) => `<div class="block"><div class="caps" style="font-weight:800">${title}</div>${items.map(x => `<p>${esc(x)}</p>`).join('')}</div>`;
-  return `<div class="wrap"><div class="caps">Plan · ${PROFILE[p].label}</div><h1>Semana</h1>
-    <div class="days" style="margin-top:20px">${WEEK.map((d, i) => `<button class="pill ${i === semDay ? 'on' : ''} ${i === t && i !== semDay ? 'td' : ''}" onclick="semDay=${i};render()">${d.short}</button>`).join('')}</div>
-    <h2 style="margin-top:24px">${day.name}</h2>
-    <div style="margin-top:6px">${day.meals.map((m, i) => `<div class="meal" onclick="openMeal(${semDay},${i})"><div style="flex:1"><div class="kind">${m.kind}</div><div class="t" style="font-size:16px">${esc(m.menu)}</div><div class="p">${m.free ? 'Libre' : esc(m[p])}</div></div></div>`).join('')}</div>
-    ${block('Reglas', RULES)}${block('Suplementación', SUPPLEMENTS.map(([k, v]) => `${k}: ${v}`))}${block('Ajustes', ADJUSTMENTS)}
+  const p = S.person, t = new Date();
+  const days = Array.from({ length: 7 }, (_, i) => { const d = new Date(t); d.setDate(t.getDate() + i); return d; });
+  return `<div class="wrap">
+    <div class="row between"><span class="sub">Próximos 7 días</span>${seg([['el','Él'],['ella','Ella']], p, 'setPerson')}</div>
+    <h1 style="margin-top:6px">Semana</h1>
+    ${days.map((d, i) => { const di = pIdx(d), day = WEEK[di];
+      const label = i === 0 ? 'Hoy' : i === 1 ? 'Mañana' : day.name;
+      return `<div class="wk"><div class="wh"><b>${label}</b><span>${i < 2 ? day.name + ' ' : ''}${d.getDate()} ${SHORT_M[d.getMonth()]}</span></div>
+        ${day.meals.map((m, j) => `<div class="wl" onclick="openMeal(${di},${j})"><span>${m.kind}</span><p>${esc(m.menu)}</p></div>`).join('')}</div>`; }).join('')}
+    <details class="more"><summary>Reglas y suplementos</summary>${[...RULES, ...SUPPLEMENTS.map(([a, b]) => `${a}: ${b}`), ...ADJUSTMENTS].map(x => `<p>${esc(x)}</p>`).join('')}</details>
   </div>`;
 }
 
@@ -377,23 +406,21 @@ const amt = (id, n, p) => id === 'aceite' && p ? (p === 'el' ? '1 cda' : '2 cdta
 
 function openMeal(di, i, fecha) {
   vib();
-  const day = WEEK[di], m = day.meals[i], p = S.person, el = document.getElementById('sheet');
+  const day = WEEK[di], m = day.meals[i], p = S.person, o = p === 'el' ? 'ella' : 'el', el = document.getElementById('sheet');
   const done = fecha ? (S.done[p][fecha] || []).includes(i) : false;
-  const main = MAIN_MEALS.includes(m.kind);
   let body = '';
-  if (m.free) body = `<p class="muted" style="margin-top:16px">Un plato razonable, sin repetir. Disfrutalo.</p>`;
+  if (m.free) body = `<p class="sub" style="margin-top:16px">Un plato razonable, sin repetir.</p>`;
   else {
-    body += `<div class="por">${['el','ella'].map(q => `<div class="${q === p ? 'me' : ''}"><span class="caps">${PROFILE[q].label}</span>${esc(m[q]).split(' · ').join('<br>')}</div>`).join('')}</div>`;
-    if (main) body += `<p class="muted" style="font-size:13px;margin-top:12px">+ ${OIL_RULE[p]} de oliva, medido. Verduras de hoja libres.</p>`;
-    body += `<div class="caps" style="font-weight:800;margin-top:28px">Ingredientes</div>
-      <div class="ing" style="border:0"><span class="n"></span>${['el','ella'].map(q => `<b class="caps" style="font-size:11px;color:${q === p ? 'var(--accent)' : 'var(--muted)'}">${PROFILE[q].label}</b>`).join('')}</div>`;
-    if (m.recipe) body += `<div class="ing"><span class="n">${RECIPES[m.recipe[0]].name}</span><b>${frac(m.recipe[1])}</b><b>${frac(m.recipe[2])}</b></div>`;
-    body += m.ing.map(([id, a, b]) => `<div class="ing"><span class="n">${ITEMS[id].name}${ITEMS[id].raw ? ' <small>cocido</small>' : ''}</span><b>${amt(id, a, 'el')}</b><b>${amt(id, b, 'ella')}</b></div>`).join('');
-    if (m.recipe) body += `<p class="muted" style="font-size:13px;margin-top:14px">Receta entera: ${RECIPES[m.recipe[0]].ing.map(([id, n]) => `${ITEMS[id].name.toLowerCase()} ${amt(id, n)}`).join(', ')}.</p>`;
+    body += `<div class="mine"><span>Tu porción</span>${esc(m[p]).split(' · ').join('<br>')}${MAIN_MEALS.includes(m.kind) ? `<small>+ ${OIL_RULE[p]} de oliva</small>` : ''}</div>`;
+    body += `<p class="sub" style="margin-top:12px">${PROFILE[o].label}: ${esc(m[o])}</p>`;
+    let rows = '';
+    if (m.recipe) rows += `<div class="ing"><span class="n">${RECIPES[m.recipe[0]].name}</span><b>${frac(m.recipe[p === 'el' ? 1 : 2])}</b></div>`;
+    rows += m.ing.map(([id, a, b]) => `<div class="ing"><span class="n">${ITEMS[id].name}${ITEMS[id].raw ? ' <small>cocido</small>' : ''}</span><b>${amt(id, p === 'el' ? a : b, p)}</b></div>`).join('');
+    body += `<details class="more"><summary>Ingredientes</summary>${rows}</details>`;
   }
-  el.innerHTML = `<div class="top"><button onclick="closeMeal()" style="width:36px;height:36px;font-size:22px">←</button>${m.kind}</div>
-    <div class="wrap"><div class="caps">${day.name}${fecha ? ' · ' + longDate(fromKey(fecha)) : ''}</div><div class="big">${esc(m.menu)}</div>${body}</div>
-    ${fecha ? `<button class="cta ${done ? 'off' : ''}" onclick="toggleMeal('${p}','${fecha}',${i});${done ? `openMeal(${di},${i},'${fecha}')` : 'closeMeal()'}">${done ? 'Desmarcar' : 'Hecha · ' + PROFILE[p].label}</button>` : ''}`;
+  el.innerHTML = `<div class="top"><button onclick="closeMeal()" class="round" aria-label="Volver">←</button></div>
+    <div class="wrap"><span class="sub">${m.kind} · ${day.name}</span><div class="big">${esc(m.menu)}</div>${body}</div>
+    ${fecha ? `<button class="cta ${done ? 'off' : ''}" onclick="toggleMeal('${p}','${fecha}',${i});${done ? `openMeal(${di},${i},'${fecha}')` : 'closeMeal()'}">${done ? 'Desmarcar' : 'Listo'}</button>` : ''}`;
   el.classList.add('open'); el.scrollTop = 0;
 }
 function closeMeal() { document.getElementById('sheet').classList.remove('open'); }
