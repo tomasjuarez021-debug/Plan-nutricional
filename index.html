@@ -171,6 +171,8 @@ const ITEMS = {
     leche: { name: 'Leche de soja (sin azúcar)', shop: 'super', unit: 'ml' },
     yogur: { name: 'Yogur de soja natural', shop: 'super', unit: 'g' },
     lecheCoco: { name: 'Leche de coco', shop: 'super', unit: 'ml' },
+    muzzarella: { name: 'Muzzarella', shop: 'super', unit: 'g' },
+    portSalut: { name: 'Queso port salut', shop: 'super', unit: 'g' },
     frutosRojos: { name: 'Frutos rojos (congelados)', shop: 'super', unit: 'g' },
     fideos: { name: 'Fideos integrales', shop: 'super', unit: 'g' },
     pureTomate: { name: 'Puré de tomate', shop: 'super', unit: 'g' },
@@ -180,7 +182,6 @@ const ITEMS = {
     aceite: { name: 'Aceite de oliva', shop: 'super', unit: 'ml' },
     // Dietética
     tofu: { name: 'Tofu', shop: 'dietetica', unit: 'g' },
-    muzzaVegana: { name: 'Queso vegano tipo muzzarella', shop: 'dietetica', unit: 'g' },
     levNutricional: { name: 'Levadura nutricional', shop: 'dietetica', unit: 'g' },
     tempeh: { name: 'Tofu o tempeh', shop: 'dietetica', unit: 'g' },
     lentejas: { name: 'Lentejas', shop: 'dietetica', unit: 'g', raw: 0.42 },
@@ -208,7 +209,7 @@ const RECIPES = {
         name: 'Tarta de acelga (entera)',
         ing: [
             ['acelga', 800],
-            ['tofu', 250],
+            ['portSalut', 200],
             ['huevo', 3],
             ['cebolla', 150],
             ['tapaTarta', 2],
@@ -220,7 +221,7 @@ const RECIPES = {
             ['harina', 300],
             ['levadura', 10],
             ['pureTomate', 200],
-            ['muzzaVegana', 200],
+            ['muzzarella', 250],
             ['morron', 80],
             ['cebolla', 80],
             ['champignon', 100],
@@ -257,7 +258,7 @@ const WEEK = [
         short: 'M',
         meals: [
             { kind: 'Desayuno', menu: 'Yogur de soja + avena tostada + kiwi + semillas', el: '250 g yogur · 50 g avena · 1 cda semillas', ella: '170 g yogur · 30 g avena · 1 cdta semillas', ing: [['yogur', 250, 170], ['avena', 50, 30], ['kiwi', 1, 1], ['semillas', 10, 5]] },
-            { kind: 'Almuerzo', menu: 'Tarta integral de acelga, tofu y huevo + ensalada', el: '¼ de tarta', ella: '⅙ de tarta', ing: [['lechuga', 60, 50], ['tomate', 80, 60], ['zanahoria', 50, 40], OIL], recipe: ['tarta', 1 / 4, 1 / 6] },
+            { kind: 'Almuerzo', menu: 'Tarta integral de acelga, port salut y huevo + ensalada', el: '¼ de tarta', ella: '⅙ de tarta', ing: [['lechuga', 60, 50], ['tomate', 80, 60], ['zanahoria', 50, 40], OIL], recipe: ['tarta', 1 / 4, 1 / 6] },
             { kind: 'Merienda', menu: 'Huevos duros + pera', el: '2 huevos · 1 pera', ella: '1 huevo · 1 pera', ing: [['huevo', 2, 1], ['pera', 1, 1]] },
             { kind: 'Colación', menu: 'Licuado de leche de soja, banana y mantequilla de maní', el: '300 ml leche de soja · 1 banana · 1 cda maní', ella: '200 ml leche de soja · ½ banana · 1 cdta maní', ing: [['leche', 300, 200], ['banana', 1, 0.5], ['mani', 16, 5]] },
             { kind: 'Cena', menu: 'Curry de garbanzos y espinaca (con leche de coco) + arroz integral', el: '220 g garbanzos · 120 g arroz', ella: '150 g garbanzos · 80 g arroz', ing: [['garbanzos', 220, 150], ['espinaca', 100, 80], ['lecheCoco', 80, 60], ['cebolla', 50, 40], ['arroz', 120, 80], OIL] },
@@ -282,7 +283,7 @@ const WEEK = [
             { kind: 'Almuerzo', menu: 'Bowl de quinoa, tofu o tempeh marinado, palta y vegetales asados', el: '120 g quinoa · 150 g tofu/tempeh · ¼ palta', ella: '80 g quinoa · 100 g tofu/tempeh · ⅛ palta', ing: [['quinoa', 120, 80], ['tempeh', 150, 100], ['palta', 0.25, 0.125], ['berenjena', 100, 80], ['morron', 60, 50], ['zapallito', 80, 60], OIL] },
             { kind: 'Merienda', menu: 'Leche de soja con cacao amargo + tostadas con palta', el: '250 ml leche de soja · 2 tostadas · ¼ palta', ella: '180 ml leche de soja · 1 tostada · ⅛ palta', ing: [['leche', 250, 180], ['cacao', 10, 5], ['pan', 2, 1], ['palta', 0.25, 0.125]] },
             { kind: 'Colación', menu: 'Fruta + almendras', el: '1 fruta · 20 g almendras', ella: '1 fruta · 10 g almendras', ing: [['fruta', 1, 1], ['almendras', 20, 10]] },
-            { kind: 'Cena', menu: 'Pizza casera integral (salsa natural, muzza vegana, verduras) + ensalada', el: '3 porciones', ella: '2 porciones', ing: [['lechuga', 60, 50], ['rucula', 30, 20], ['tomate', 60, 50], OIL], recipe: ['pizza', 3 / 8, 2 / 8] },
+            { kind: 'Cena', menu: 'Pizza casera integral (salsa natural, muzzarella, verduras) + ensalada', el: '3 porciones', ella: '2 porciones', ing: [['lechuga', 60, 50], ['rucula', 30, 20], ['tomate', 60, 50], OIL], recipe: ['pizza', 3 / 8, 2 / 8] },
         ],
     },
     {
